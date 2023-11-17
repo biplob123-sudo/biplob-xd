@@ -1,0 +1,20 @@
+
+import pywifi
+
+wifi = pywifi.PyWiFi()  # Create an instance of the PyWiFi class
+iface = wifi.interfaces()[0]  # Get the first wifi interface
+
+iface.scan()  # Scan for available wifi networks
+networks = iface.scan_results()
+
+for network in networks:
+    if network.ssid == 'MyWifiNetwork':  # Replace 'MyWifiNetwork' with the name of the wifi network you want to connect to
+        profile = pywifi.Profile()
+        profile.ssid = network.ssid
+        profile.auth = pywifi.const.AUTH_ALG_OPEN
+        profile.akm.append(pywifi.const.AKM_TYPE_NONE)
+
+        iface.remove_all_network_profiles()  # Remove all existing wifi profiles
+        iface.connect(profile)  # Connect to the wifi network
+
+        break
